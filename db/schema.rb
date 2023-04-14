@@ -10,20 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_14_202643) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_14_222721) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "albums", force: :cascade do |t|
     t.string "name"
     t.integer "price"
-    t.bigint "song_id", null: false
     t.bigint "artist_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "duration"
     t.index ["artist_id"], name: "index_albums_on_artist_id"
-    t.index ["song_id"], name: "index_albums_on_song_id"
   end
 
   create_table "albums_orders", force: :cascade do |t|
@@ -72,11 +70,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_14_202643) do
     t.integer "duration"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "album_id"
+    t.index ["album_id"], name: "index_songs_on_album_id"
   end
 
   add_foreign_key "albums", "artists"
-  add_foreign_key "albums", "songs"
   add_foreign_key "albums_orders", "albums"
   add_foreign_key "albums_orders", "orders"
   add_foreign_key "orders", "customers"
+  add_foreign_key "songs", "albums"
 end
