@@ -70,7 +70,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_14_222721) do
     t.integer "duration"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "album_id"
+    t.bigint "album_id", null: false
     t.index ["album_id"], name: "index_songs_on_album_id"
   end
 
