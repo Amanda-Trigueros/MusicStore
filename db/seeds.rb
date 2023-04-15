@@ -60,7 +60,6 @@ Artist.all.each do |artist|
     albums = Album.new(
       name: Faker::Music.album,
       price: Faker::Alphanumeric.alphanumeric(number: 4, min_numeric: 4),
-      duration: 500,
       artist_id: artist.id,
     )
   
@@ -80,7 +79,7 @@ Album.all.each do |album|
   rand(4..10).times do |number|
     song = Song.new(
       name: Faker::Music::RockBand.song,
-      duration: 500,
+      duration: rand(140...200),
       album_id: album.id,
     )
 
@@ -93,6 +92,9 @@ Album.all.each do |album|
     end
 
   end
+
+  album_duration = Song.where(album_id: album.id).sum(:duration)
+  album.update(duration: album_duration)
 end
 
 puts "\nCreate new order"
@@ -100,7 +102,7 @@ Customer.all.each do |customer|
   rand(1..5).times do |number|
     order = Order.new(
       date: Faker::Date.between(from: '2023-01-01', to: 1.days.ago),
-      total: 5000,
+      total: 500,
       customer_id: customer.id,
     )
 
@@ -113,6 +115,7 @@ Customer.all.each do |customer|
     end
 
   end
+
 end
 
 puts "\nCreate new albums_orders"
@@ -123,6 +126,7 @@ Order.all.each do |order|
       album_id: Album.all.sample.id,
       album_copies: rand(1..3),
     )
+    
     if albums_orders.save
       print "."
     else
